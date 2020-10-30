@@ -3,7 +3,7 @@
 namespace JCIT\jobqueue\components;
 
 use JCIT\jobqueue\events\BeanstalkEvent;
-use JCIT\jobqueue\factories\JobFactory;
+use JCIT\jobqueue\interfaces\JobFactoryInterface;
 use JCIT\jobqueue\interfaces\JobInterface;
 use JCIT\jobqueue\interfaces\JobQueueInterface;
 use Pheanstalk\Connection;
@@ -18,18 +18,18 @@ use Pheanstalk\Pheanstalk;
 class Beanstalk extends Pheanstalk implements JobQueueInterface
 {
     /**
-     * @var JobFactory
+     * @var JobFactoryInterface
      */
     protected $jobFactory;
 
     /**
      * Beanstalk constructor.
      * @param Connection $connection
-     * @param JobFactory $jobFactory
+     * @param JobFactoryInterface $jobFactory
      */
     public function __construct(
         Connection $connection,
-        JobFactory $jobFactory
+        JobFactoryInterface $jobFactory
     ) {
         $this->jobFactory = $jobFactory;
         parent::__construct($connection);
