@@ -2,13 +2,12 @@
 
 namespace JCIT\jobqueue\components;
 
-use JCIT\jobqueue\events\BeanstalkEvent;
+use JCIT\jobqueue\events\JobQueueEvent;
 use JCIT\jobqueue\interfaces\JobFactoryInterface;
 use JCIT\jobqueue\interfaces\JobInterface;
 use JCIT\jobqueue\interfaces\JobQueueInterface;
 use Pheanstalk\Connection;
 use Pheanstalk\Contract\PheanstalkInterface;
-use Pheanstalk\Job;
 use Pheanstalk\Pheanstalk;
 
 /**
@@ -36,38 +35,22 @@ class Beanstalk extends Pheanstalk implements JobQueueInterface
     }
 
     /**
-     * @param string $data
-     * @param int $priority
-     * @param int $delay
-     * @param int $ttr
-     * @return Job
-     */
-    public function put(
-        string $data,
-        int $priority = PheanstalkInterface::DEFAULT_PRIORITY,
-        int $delay = PheanstalkInterface::DEFAULT_DELAY,
-        int $ttr = PheanstalkInterface::DEFAULT_TTR
-    ): Job {
-        $result = parent::put($data, $priority, $delay, $ttr);
-        $event = new BeanstalkEvent($result);
-        \Yii::$app->trigger($event::EVENT_JOB_SUBMITTED, $event);
-        return $result;
-    }
-
-    /**
-     * @param JobInterface $task
+     * @param JobInterface $job
      * @param int $priority
      * @param int $delay
      * @param int $ttr
      */
     public function putJob(
-        JobInterface $task,
+        JobInterface $job,
         int $priority = PheanstalkInterface::DEFAULT_PRIORITY,
         int $delay = PheanstalkInterface::DEFAULT_DELAY,
         int $ttr = PheanstalkInterface::DEFAULT_TTR
     ): void {
+        $event = new JobQueueEvent($job);
+        \Yii::$app->trigger($event::EVENT_JOB_QUEUE_PUT, $event);
+
         $this->put(
-            $this->jobFactory->saveToJson($task),
+            $this->jobFactory->saveToJson($job),
             $priority,
             $delay,
             $ttr
