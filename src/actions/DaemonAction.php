@@ -6,7 +6,6 @@ use JCIT\jobqueue\events\JobQueueEvent;
 use JCIT\jobqueue\exceptions\PermanentException;
 use JCIT\jobqueue\interfaces\JobFactoryInterface;
 use League\Tactician\CommandBus;
-use Pheanstalk\Contract\JobIdInterface;
 use Pheanstalk\Contract\PheanstalkInterface;
 use yii\base\Action;
 use yii\base\InvalidConfigException;
