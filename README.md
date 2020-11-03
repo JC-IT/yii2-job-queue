@@ -68,6 +68,10 @@ public function actions(): array
 }
 ```
 
+### Optional: install as service
+
+Look [here](https://www.yiiframework.com/extension/yiisoft/yii2-queue/doc/guide/2.0/en/worker) to see an example how the worker can be installed as a linux service.
+
 ## Quick test
 
 - Execute steps in Configuration
