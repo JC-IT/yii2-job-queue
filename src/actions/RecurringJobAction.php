@@ -46,7 +46,7 @@ class RecurringJobAction extends Action
         parent::init();
     }
 
-    public function run()
+    public function run(): void
     {
         while(true) {
             try {

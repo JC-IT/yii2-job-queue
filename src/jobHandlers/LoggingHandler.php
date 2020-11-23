@@ -8,7 +8,7 @@ use JCIT\jobqueue\interfaces\JobInterface;
 use yii\log\Logger;
 
 /**
- * Example of how logging can be added to the
+ * Example of how logging can be added to the handler
  *
  * Class LogHandler
  * @package JCIT\jobqueue\jobHandlers

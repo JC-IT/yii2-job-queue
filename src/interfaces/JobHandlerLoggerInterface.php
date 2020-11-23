@@ -22,6 +22,11 @@ interface JobHandlerLoggerInterface
 
     /**
      * @param JobInterface $job
+     */
+    public function failed(JobInterface $job): void;
+
+    /**
+     * @param JobInterface $job
      * @param string $message
      * @param int $level
      */

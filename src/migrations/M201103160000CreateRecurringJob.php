@@ -19,11 +19,11 @@ class M201103160000CreateRecurringJob extends Migration
                 'name' => $this->string()->notNull(),
                 'description' => $this->text(),
                 'cron' => $this->string()->notNull(),
-                'taskData' => $this->json(),
+                'jobData' => $this->json(),
 
-                'queued_at' => $this->timestamp()->null(),
-                'created_at' => $this->timestamp()->null(),
-                'updated_at' => $this->timestamp()->null(),
+                'queuedAt' => $this->timestamp()->null(),
+                'createdAt' => $this->timestamp()->null(),
+                'updatedAt' => $this->timestamp()->null(),
             ]
         );
     }

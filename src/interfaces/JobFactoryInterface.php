@@ -22,6 +22,12 @@ interface JobFactoryInterface
 
     /**
      * @param JobInterface $job
+     * @return array
+     */
+    public function saveToArray(JobInterface $job): array;
+
+    /**
+     * @param JobInterface $job
      * @return string
      */
     public function saveToJson(JobInterface $job): string;

@@ -47,15 +47,22 @@ class JobFactory implements JobFactoryInterface
 
     /**
      * @param JobInterface $job
+     * @return array
+     */
+    public function saveToArray(JobInterface $job): array
+    {
+        return [
+            'class' => get_class($job),
+            'data' => $job->jsonSerialize(),
+        ];
+    }
+
+    /**
+     * @param JobInterface $job
      * @return string
      */
     public function saveToJson(JobInterface $job): string
     {
-        $data = [
-            'class' => get_class($job),
-            'data' => $job
-        ];
-
-        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        return json_encode($this->saveToArray($job), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 }

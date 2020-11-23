@@ -2,12 +2,14 @@
 
 namespace JCIT\jobqueue\jobHandlers;
 
+use Closure;
 use JCIT\jobqueue\interfaces\JobFactoryInterface;
 use JCIT\jobqueue\interfaces\JobHandlerInterface;
 use JCIT\jobqueue\interfaces\JobInterface;
 use JCIT\jobqueue\interfaces\JobQueueInterface;
 use JCIT\jobqueue\jobs\RecurringJob;
 use JCIT\jobqueue\models\activeRecord\RecurringJob as ActiveRecordRecurringJob;
+use yii\base\InvalidArgumentException;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -19,7 +21,12 @@ class RecurringHandler implements JobHandlerInterface
     /**
      * @var integer
      */
-    protected $delay;
+    public $delay = 1;
+
+    /**
+     * @var Closure
+     */
+    public $jobCreatedCallback;
 
     /**
      * @var JobFactoryInterface
@@ -34,34 +41,58 @@ class RecurringHandler implements JobHandlerInterface
     /**
      * @var integer
      */
-    protected $priority;
+    public $priority = 2048;
+
+    /**
+     * @var Closure
+     */
+    public $queryModifier;
+
+    /**
+     * @var string
+     */
+    public $queuedAtAttribute = 'queuedAt';
+
+    /**
+     * @var string
+     */
+    public $recurringJobClass = RecurringJob::class;
+
+    /**
+     * @var string
+     */
+    public $jobDataAttribute = 'jobData';
 
     /**
      * RecurringHandler constructor.
      * @param JobFactoryInterface $jobFactory
      * @param JobQueueInterface $jobQueue
-     * @param int $priority
-     * @param int $delay
      */
     public function __construct(
         JobFactoryInterface $jobFactory,
-        JobQueueInterface $jobQueue,
-        int $priority = 2048,
-        int $delay = 1
+        JobQueueInterface $jobQueue
     ) {
         $this->jobFactory = $jobFactory;
         $this->jobQueue = $jobQueue;
-        $this->priority = $priority;
-        $this->delay = $delay;
     }
 
     /**
-     * @param ActiveRecordRecurringJob $recurringJob
+     * @param $recurringJob
      * @return JobInterface
      */
-    protected function createJob(ActiveRecordRecurringJob $recurringJob): JobInterface
+    protected function createJob($recurringJob): JobInterface
     {
-        return $this->jobFactory->createFromArray($recurringJob->task_data);
+        if (!$recurringJob instanceof $this->recurringJobClass) {
+            throw new InvalidArgumentException('Recurring job must be instance of ' . $this->recurringJobClass);
+        }
+
+        $job = $this->jobFactory->createFromArray($recurringJob->{$this->jobDataAttribute});
+
+        if ($this->jobCreatedCallback) {
+            ($this->jobCreatedCallback)($job);
+        }
+
+        return $job;
     }
 
     /**
@@ -69,15 +100,21 @@ class RecurringHandler implements JobHandlerInterface
      */
     public function handle(JobInterface $job): void
     {
+        $query = $this->recurringJobClass::find();
+        if ($this->queryModifier) {
+            ($this->queryModifier)($query);
+        }
+
         /** @var ActiveRecordRecurringJob $recurringJob */
-        foreach(ActiveRecordRecurringJob::find()->each() as $recurringJob) {
+        foreach($query->each() as $recurringJob) {
             try {
                 if ($recurringJob->isDue) {
-                    $this->jobQueue->putJob($this->createJob($recurringJob),
+                    $this->jobQueue->putJob(
+                        $this->createJob($recurringJob),
                         $this->priority,
                         $this->delay
                     );
-                    $recurringJob->getBehavior(TimestampBehavior::class)->touch('queued_at');
+                    $recurringJob->getBehavior(TimestampBehavior::class)->touch($this->queuedAtAttribute);
                 }
             } catch (\Throwable $t) {
                 \Yii::error($t);

@@ -7,20 +7,22 @@ use JCIT\jobqueue\interfaces\JobFactoryInterface;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\validators\InlineValidator;
 use yii\validators\RequiredValidator;
+use yii\validators\StringValidator;
 
 /**
  * Class RecurringJob
- * @package JCIT\jobqueue
+ * @package JCIT\jobqueue\models\activeRecord
  *
  * @property int $id [int(11)]
  * @property string $name [varchar(255)]
  * @property string $description
  * @property string $cron
- * @property array $task_data [json]
- * @property int|null $queued_at [timestamp]
- * @property int|null $created_at [timestamp]
- * @property int|null $updated_at [timestamp]
+ * @property array $jobData [json]
+ * @property int|null $queuedAt [timestamp]
+ * @property int|null $createdAt [timestamp]
+ * @property int|null $updatedAt [timestamp]
  *
  * @property-read bool $isDue
  */
@@ -53,20 +55,21 @@ class RecurringJob extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['name', 'cron', 'taskConfig'], RequiredValidator::class],
-            [['cron'], function() {
+            [['name', 'cron', 'jobData'], RequiredValidator::class],
+            [['description'], StringValidator::class],
+            [['cron'], function($attribute, $params, InlineValidator $validator) {
                 try {
                     CronExpression::factory($this->cron);
                 } catch (\InvalidArgumentException $e) {
-                    $this->addError('cron', $e->getMessage());
+                    $this->addError($attribute, $e->getMessage());
                 }
             }],
 
-            [['taskConfig'], function(){
+            [['jobData'], function($attribute, $params, InlineValidator $validator){
                 try {
-                    \Yii::createObject(JobFactoryInterface::class)->createFromArray($this->task_data);
+                    \Yii::createObject(JobFactoryInterface::class)->createFromArray($this->jobData);
                 } catch (\Throwable $t) {
-                    $this->addError('taskConfig', $t->getMessage());
+                    $this->addError($attribute, $t->getMessage());
                 }
             }]
         ];
