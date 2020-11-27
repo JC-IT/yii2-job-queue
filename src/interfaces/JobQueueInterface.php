@@ -18,7 +18,7 @@ interface JobQueueInterface
      * @param int $ttr
      */
     public function putJob(
-        JobInterface $task,
+        JobInterface $job,
         int $priority = self::PRIORITY_NORMAL,
         int $delay = 0,
         int $ttr = 60
