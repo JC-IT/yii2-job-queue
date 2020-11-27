@@ -99,16 +99,18 @@ class DaemonAction extends Action
                     $event = new JobQueueEvent($jobCommand);
                     \Yii::$app->trigger($event::EVENT_JOB_QUEUE_HANDLE, $event);
 
+                    $jobClass = get_class($jobCommand);
+                    $this->controller->stdout(PHP_EOL . "Starting job: {$jobClass}({$job->getId()})" . PHP_EOL, Console::FG_CYAN);
                     $this->commandBus->handle($jobCommand);
-                    $this->controller->stdout(PHP_EOL . "Deleting job: {$job->getId()}" . PHP_EOL, Console::FG_GREEN);
+                    $this->controller->stdout("Deleting job: {$job->getId()}" . PHP_EOL, Console::FG_GREEN);
                     $this->beanstalk->delete($job);
                 } catch (PermanentException $e) {
                     \Yii::error($e, self::class);
-                    $this->controller->stdout(PHP_EOL . "Deleting job with permanent exception: {$job->getId()}" . PHP_EOL, Console::FG_RED);
+                    $this->controller->stdout(PHP_EOL . "Deleting job({$job->getId()}) with permanent exception: {$e->getMessage()}" . PHP_EOL, Console::FG_RED);
                     $this->beanstalk->delete($job);
                 } catch (\Throwable $t) {
                     \Yii::error($t, self::class);
-                    $this->controller->stdout(PHP_EOL . "Burying job: {$job->getId()}" . PHP_EOL, Console::FG_YELLOW);
+                    $this->controller->stdout(PHP_EOL . "Burying job({$job->getId()}) with message: {$t->getMessage()}" . PHP_EOL, Console::FG_YELLOW);
                     $this->beanstalk->bury($job);
                 }
 
