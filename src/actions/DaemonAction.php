@@ -114,8 +114,9 @@ class DaemonAction extends Action
                     $this->beanstalk->bury($job);
                 }
 
-                $this->db->close();
             }
+            
+            $this->db->close();
 
             \Yii::getLogger()->flush();
             foreach(\Yii::getLogger()->dispatcher->targets as $target) {
