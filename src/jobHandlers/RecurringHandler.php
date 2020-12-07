@@ -114,7 +114,9 @@ class RecurringHandler implements JobHandlerInterface
                         $this->priority,
                         $this->delay
                     );
-                    $recurringJob->getBehavior(TimestampBehavior::class)->touch($this->queuedAtAttribute);
+                    if ($this->queuedAtAttribute) {
+                        $recurringJob->touch($this->queuedAtAttribute);
+                    }
                 }
             } catch (\Throwable $t) {
                 \Yii::error($t);
