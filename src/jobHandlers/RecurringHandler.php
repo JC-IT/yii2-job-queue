@@ -89,7 +89,7 @@ class RecurringHandler implements JobHandlerInterface
         $job = $this->jobFactory->createFromArray($recurringJob->{$this->jobDataAttribute});
 
         if ($this->jobCreatedCallback) {
-            ($this->jobCreatedCallback)($job);
+            ($this->jobCreatedCallback)($job, $recurringJob);
         }
 
         return $job;
