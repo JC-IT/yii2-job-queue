@@ -42,7 +42,7 @@ jobs:
         run: composer install --prefer-dist
       - name: Run tests
         run: composer test -- --coverage-xml
-      - name: Get Ocular
-        run: composer global require scrutinizer/ocular
       - name: Push code coverage
-        run: ~/.config/composer/vendor/bin/ocular code-coverage:upload --format=php-clover tests/_output/coverage.xml
+        run:
+          composer global require scrutinizer/ocular
+          ~/.composer/vendor/bin/ocular code-coverage:upload --format=php-clover tests/_output/coverage.xml
