@@ -1,4 +1,7 @@
-# Job Queue for Yii2 based on Beanstalkd
+# Job Queue for Yii2 (based on Beanstalkd)
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JC-IT/yii2-job-queue/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JC-IT/yii2-job-queue/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/JC-IT/yii2-job-queue/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/JC-IT/yii2-job-queue/?branch=master)
 
 This extension provides a package that implements a queue, workers and jobs.
 
@@ -13,12 +16,6 @@ or add
 ```
 
 to the `require` section of your `composer.json` file.
-
-## Important
-
-This package has been created to share code between projects (for now). This means that it can change regularly with breaking changes.
-
-Make sure a specific version is used.
 
 ## Configuration
 
@@ -113,48 +110,11 @@ class JobQueueController extends \yii\console\Controller
   - Injection should be done on construction of the handler
 
 ## Logging
-- Implement `\JCIT\jobqueue\interfaces\JobHandlerLoggerInterface::class` and register it in your DI
-- Either add it to you JobHandler or extend `\JCIT\jobqueue\jobHandlers\LoggingHandler::class`
-- `\JCIT\jobqueue\events\JobQueueEvent` is triggered on `->put` and `->handle` to enable even more precise logging  
+To extend with an easy ActiveRecord logging of the jobs, look at https://packagist.org/packages/jc-it/yii2-job-queue-logging.
 
 ## Recurring jobs
-A possible implementation for recurring jobs has been added. This implementation stores the recurrence using the [Cron](https://crontab.guru/) notation and an Active Record model. 
-It can easily be extended by creating own implementations for the AR model and Handler.
-
-To use the recurring jobs with the implementation as provided by the package:
-- Add `\JCIT\jobqueue\migrations` to your migration namespaces, or extend a new migration from the migration in the package and run them
-- Register `\JCIT\jobqueue\jobs\RecurringJob::class` and `\JCIT\jobqueue\jobHandlers\RecurringHandler::class` in the `ContainerMapLocator` (as shown in the configuration) 
-- Add the recurring action to the controller:
-```php
-public function actions(): array
-{
-    return [
-        'daemon' => \JCIT\jobqueue\actions\DaemonAction::class,
-        'recurring' => \JCIT\jobqueue\actions\RecurringJobAction::class,
-    ];
-}
-```
-- Run action, i.e. `./yii job-queue/recurring`
-- Add a recurring job to the database i.e.
-```php
-$jobFactory = \Yii::createObject(\JCIT\jobqueue\interfaces\JobFactoryInterface::class);
-$job = new \JCIT\jobqueue\models\activeRecord\RecurringJob([
-    'name' => 'Hello world job',
-    'description' => 'Say hello to the world every minute',
-    'job_data' => $jobFactory->saveToArray(new \JCIT\jobqueue\jobs\HelloJob('world')),
-    'cron' => '* * * * *'
-]);
-$job->save();
-```
+To extend with easy ActiveRecord based recurring jobs, look at https://packagist.org/packages/jc-it/yii2-job-queue-recurring.
 
 ## Credits
 - [Sam Mousa](https://github.com/SamMousa)
 - [Joey Claessen](https://github.com/joester89)
-
-## License
-
-This code is proprietary but [Wolfpack IT (Works B.V.)](https://github.com/wolfpack-it) has a forever-use right in her or her customers' projects. 
-Modifications can be made in a fork of this repository but it is not allowed to copy code outside. 
-
-## Wolfpack IT Hints
-- Look at the [Urban Journalist project](https://gitlab.com/wolfpackit/projects/urban-journalist/uj---rebuild/api-backend-frontend) where this package has been used.
