@@ -45,4 +45,4 @@ jobs:
       - name: Get Ocular
         run: composer global require scrutinizer/ocular
       - name: Push code coverage
-        run: ~/.composer/vendor/bin/ocular code-coverage:upload --format=php-clover tests/_output/coverage.xml
+        run: ~/.config/composer/vendor/bin/ocular code-coverage:upload --format=php-clover tests/_output/coverage.xml
