@@ -1,4 +1,4 @@
-namespace: tests
+namespace: JCIT\jobqueue\tests
 paths:
   tests: tests
   output: tests/_output
@@ -23,3 +23,4 @@ coverage:
   local: true
   include:
     - src/*.php
+  exclude:

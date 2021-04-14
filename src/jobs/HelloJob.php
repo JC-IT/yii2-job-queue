@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JCIT\jobqueue\jobs;
 
@@ -11,7 +12,7 @@ class HelloJob implements JobInterface
     ) {
     }
 
-    public static function fromArray(array $config): JobInterface
+    public static function fromArray(array $config): self
     {
         return new static($config['name']);
     }

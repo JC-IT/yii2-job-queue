@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JCIT\jobqueue\components;
 
@@ -26,8 +27,9 @@ class ContainerMapLocator implements HandlerLocator
         return $this->container->get($this->map[$commandName]);
     }
 
-    public function setHandlerForCommand(string $commandName, string $handler)
+    public function setHandlerForCommand(string $commandName, string $handler): self
     {
         $this->map[$commandName] = $handler;
+        return $this;
     }
 }

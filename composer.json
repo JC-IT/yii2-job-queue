@@ -42,11 +42,8 @@
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/"
-        ],
         "psr-4": {
-            "test\\": ["tests/"]
+            "JCIT\\jobqueue\\tests\\": ["tests/"]
         }
     },
     "scripts": {

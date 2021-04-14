@@ -4,21 +4,17 @@ declare(strict_types=1);
 namespace JCIT\jobqueue\components\jobQueues;
 
 use Closure;
-use JCIT\jobqueue\interfaces\JobFactoryInterface;
 use JCIT\jobqueue\interfaces\JobInterface;
 use JCIT\jobqueue\interfaces\JobQueueInterface;
-use Pheanstalk\Connection;
+use League\Tactician\CommandBus;
 use Pheanstalk\Contract\PheanstalkInterface;
-use Pheanstalk\Pheanstalk;
 
-class Beanstalk extends Pheanstalk implements JobQueueInterface
+class Synchronous implements JobQueueInterface
 {
     public function __construct(
-        Connection $connection,
-        private JobFactoryInterface $jobFactory,
+        private CommandBus $commandBus,
         private ?Closure $beforePut = null
     ) {
-        parent::__construct($connection);
     }
 
     public function putJob(
@@ -31,11 +27,6 @@ class Beanstalk extends Pheanstalk implements JobQueueInterface
             ($this->beforePut)($job);
         }
 
-        $this->put(
-            $this->jobFactory->saveToJson($job),
-            $priority,
-            $delay,
-            $ttr
-        );
+        $this->commandBus->handle($job);
     }
 }

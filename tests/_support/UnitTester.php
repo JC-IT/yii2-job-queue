@@ -1,5 +1,5 @@
 <?php
-namespace tests;
+namespace JCIT\jobqueue\tests;
 
 /**
  * Inherited Methods
