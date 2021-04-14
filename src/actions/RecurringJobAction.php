@@ -8,32 +8,14 @@ use yii\base\Action;
 use yii\base\InvalidConfigException;
 use yii\console\Application;
 
-/**
- * Class CronAction
- * @package JCIT\jobqueue\actions
- */
 class RecurringJobAction extends Action
 {
-    /**
-     * @var CommandBus
-     */
-    protected $commandBus;
-
-    /**
-     * DaemonAction constructor.
-     * @param $id
-     * @param $controller
-     * @param CommandBus $commandBus
-     * @param array $config
-     */
     public function __construct(
         $id,
         $controller,
-        CommandBus $commandBus,
+        private CommandBus $commandBus,
         $config = []
     ) {
-        $this->commandBus = $commandBus;
-
         parent::__construct($id, $controller, $config);
     }
 

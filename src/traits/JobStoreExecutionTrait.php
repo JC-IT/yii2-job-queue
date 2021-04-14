@@ -6,34 +6,16 @@ use JCIT\jobqueue\interfaces\JobFactoryInterface;
 use JCIT\jobqueue\interfaces\JobStoreExecutionInterface;
 use JCIT\jobqueue\models\activeRecord\JobExecution;
 
-/**
- * Trait JobStoreExecutionTrait
- * @package JCIT\jobqueue\traits
- */
 trait JobStoreExecutionTrait
 {
-    /**
-     * @var string
-     */
-    protected $jobExecutionClass = JobExecution::class;
+    /** @var class-string */
+    protected string $jobExecutionClass = JobExecution::class;
 
-    /**
-     * @var int
-     */
-    protected $jobExecutionId;
-
-    /**
-     * JobStoreExecutionTrait constructor.
-     * @param int|null $jobExecutionId
-     */
-    public function __construct(int $jobExecutionId = null)
-    {
-        $this->jobExecutionId = $jobExecutionId;
+    public function __construct(
+        private ?int $jobExecutionId = null
+    ) {
     }
 
-    /**
-     * @return JobExecution
-     */
     public function getJobExecution(): JobExecution
     {
         if ($this->jobExecutionId) {
@@ -50,10 +32,6 @@ trait JobStoreExecutionTrait
         }
     }
 
-    /**
-     * @param JobExecution $jobExecution
-     * @return $this
-     */
     public function setJobExecution(JobExecution $jobExecution): JobStoreExecutionInterface
     {
         $this->jobExecutionId = $jobExecution->id;

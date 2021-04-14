@@ -4,10 +4,6 @@ namespace JCIT\jobqueue\migrations;
 
 use yii\db\Migration;
 
-/**
- * Class M201103160000CreateRecurringJob
- * @package JCIT\jobqueue\migrations
- */
 class M201103160000CreateRecurringJob extends Migration
 {
     public function safeUp()

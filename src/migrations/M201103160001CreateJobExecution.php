@@ -4,10 +4,6 @@ namespace JCIT\jobqueue\migrations;
 
 use yii\db\Migration;
 
-/**
- * Class M201103160001CreateJobExecution
- * @package JCIT\jobqueue\migrations
- */
 class M201103160001CreateJobExecution extends Migration
 {
     public function safeUp()

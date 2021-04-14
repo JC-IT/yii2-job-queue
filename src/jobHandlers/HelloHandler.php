@@ -6,10 +6,6 @@ use JCIT\jobqueue\interfaces\JobHandlerInterface;
 use JCIT\jobqueue\interfaces\JobInterface;
 use JCIT\jobqueue\jobs\HelloJob;
 
-/**
- * Class HelloHandler
- * @package JCIT\jobqueue\jobHandlers
- */
 class HelloHandler implements JobHandlerInterface
 {
     /**

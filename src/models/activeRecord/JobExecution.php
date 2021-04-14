@@ -13,9 +13,6 @@ use yii\validators\RangeValidator;
 use yii\validators\RequiredValidator;
 
 /**
- * Class JobExecution
- * @package JCIT\jobqueue\models\activeRecord
- *
  * @property int $id [int(11)]
  * @property int $recurringJobId [int(11)]
  * @property array $jobData [json]
@@ -23,6 +20,8 @@ use yii\validators\RequiredValidator;
  * @property int $createdBy [int(11)]
  * @property int $createdAt [timestamp]
  * @property int $updatedAt [timestamp]
+ *
+ * @property-read RecurringJob $recurringJob
  *
  * @method void touch($attribute)
  */
@@ -34,14 +33,8 @@ class JobExecution extends ActiveRecord
     const STATUS_QUEUED = 'queued';
     const STATUS_STARTED = 'started';
 
-    /**
-     * @var string
-     */
-    protected $recurringJobClass = RecurringJob::class;
+    protected string $recurringJobClass = RecurringJob::class;
 
-    /**
-     * @return array
-     */
     public function behaviors(): array
     {
         return [
@@ -55,17 +48,11 @@ class JobExecution extends ActiveRecord
         ];
     }
 
-    /**
-     * @return ActiveQuery
-     */
     public function getRecurringJob(): ActiveQuery
     {
         return $this->hasOne($this->recurringJobClass, ['id' => 'recurringJobId']);
     }
 
-    /**
-     * @return array
-     */
     public function rules(): array
     {
         return [
@@ -82,9 +69,6 @@ class JobExecution extends ActiveRecord
         ];
     }
 
-    /**
-     * @return array
-     */
     public function statusOptions(): array
     {
         return [

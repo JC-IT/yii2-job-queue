@@ -10,76 +10,24 @@ use JCIT\jobqueue\interfaces\JobQueueInterface;
 use JCIT\jobqueue\jobs\RecurringJob;
 use JCIT\jobqueue\models\activeRecord\RecurringJob as ActiveRecordRecurringJob;
 use yii\base\InvalidArgumentException;
-use yii\behaviors\TimestampBehavior;
 
-/**
- * Class RecurringHandler
- * @package JCIT\jobqueue\jobHandlers
- */
 class RecurringHandler implements JobHandlerInterface
 {
-    /**
-     * @var integer
-     */
-    public $delay = 1;
+    public int $delay = 1;
+    public Closure $jobCreatedCallback;
+    public int $priority = 2048;
+    public Closure $queryModifier;
+    public string $queuedAtAttribute = 'queuedAt';
+    /** @var class-string */
+    public string $recurringJobClass = RecurringJob::class;
+    public string $jobDataAttribute = 'jobData';
 
-    /**
-     * @var Closure
-     */
-    public $jobCreatedCallback;
-
-    /**
-     * @var JobFactoryInterface
-     */
-    private $jobFactory;
-
-    /**
-     * @var JobQueueInterface
-     */
-    private $jobQueue;
-
-    /**
-     * @var integer
-     */
-    public $priority = 2048;
-
-    /**
-     * @var Closure
-     */
-    public $queryModifier;
-
-    /**
-     * @var string
-     */
-    public $queuedAtAttribute = 'queuedAt';
-
-    /**
-     * @var string
-     */
-    public $recurringJobClass = RecurringJob::class;
-
-    /**
-     * @var string
-     */
-    public $jobDataAttribute = 'jobData';
-
-    /**
-     * RecurringHandler constructor.
-     * @param JobFactoryInterface $jobFactory
-     * @param JobQueueInterface $jobQueue
-     */
     public function __construct(
-        JobFactoryInterface $jobFactory,
-        JobQueueInterface $jobQueue
+        private JobFactoryInterface $jobFactory,
+        private JobQueueInterface $jobQueue
     ) {
-        $this->jobFactory = $jobFactory;
-        $this->jobQueue = $jobQueue;
     }
 
-    /**
-     * @param $recurringJob
-     * @return JobInterface
-     */
     protected function createJob($recurringJob): JobInterface
     {
         if (!$recurringJob instanceof $this->recurringJobClass) {
@@ -95,9 +43,6 @@ class RecurringHandler implements JobHandlerInterface
         return $job;
     }
 
-    /**
-     * @param RecurringJob $job
-     */
     public function handle(JobInterface $job): void
     {
         $query = $this->recurringJobClass::find();

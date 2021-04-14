@@ -12,9 +12,6 @@ use yii\validators\RequiredValidator;
 use yii\validators\StringValidator;
 
 /**
- * Class RecurringJob
- * @package JCIT\jobqueue\models\activeRecord
- *
  * @property int $id [int(11)]
  * @property string $name [varchar(255)]
  * @property string $description
@@ -28,9 +25,6 @@ use yii\validators\StringValidator;
  */
 class RecurringJob extends ActiveRecord
 {
-    /**
-     * @return array
-     */
     public function behaviors(): array
     {
         return [
@@ -41,17 +35,11 @@ class RecurringJob extends ActiveRecord
         ];
     }
 
-    /**
-     * @return bool
-     */
     public function getIsDue(): bool
     {
         return CronExpression::factory($this->cron)->isDue();
     }
 
-    /**
-     * @return array|array[]
-     */
     public function rules(): array
     {
         return [

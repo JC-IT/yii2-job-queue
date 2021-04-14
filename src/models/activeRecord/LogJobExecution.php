@@ -10,25 +10,18 @@ use yii\validators\RequiredValidator;
 use yii\validators\StringValidator;
 
 /**
- * Class LogJobExecution
- * @package JCIT\jobqueue\models\activeRecord
- *
  * @property int $id [int(11)]
  * @property int $jobExecutionId [int(11)]
  * @property string $type [varchar(255)]
  * @property string $message
  * @property int $createdAt [timestamp]
+ *
+ * @property-read JobExecution $jobExecution
  */
 class LogJobExecution extends ActiveRecord
 {
-    /**
-     * @var string
-     */
-    protected $jobExecutionClass = JobExecution::class;
+    protected string $jobExecutionClass = JobExecution::class;
 
-    /**
-     * @return array
-     */
     public function behaviors(): array
     {
         return [
@@ -39,17 +32,11 @@ class LogJobExecution extends ActiveRecord
         ];
     }
 
-    /**
-     * @return ActiveQuery
-     */
     public function getJobExecution(): ActiveQuery
     {
         return $this->hasOne($this->jobExecutionClass, ['id' => 'jobExecutionId']);
     }
 
-    /**
-     * @return array
-     */
     public function rules(): array
     {
         return [

@@ -7,23 +7,10 @@ use JCIT\jobqueue\interfaces\JobInterface;
 use JCIT\jobqueue\interfaces\JobStoreExecutionInterface;
 use JCIT\jobqueue\models\activeRecord\JobExecution;
 use JCIT\jobqueue\models\activeRecord\LogJobExecution;
-use yii\behaviors\TimestampBehavior;
 use yii\log\Logger;
 
-/**
- * Class JobHandlerLogger
- * @package common\components
- */
 class JobHandlerLogger implements JobHandlerLoggerInterface
 {
-    /**
-     * @var JobExecution
-     */
-    protected $jobExcecution;
-
-    /**
-     * @param JobInterface $job
-     */
     public function begin(JobInterface $job): void
     {
         if ($job instanceof JobStoreExecutionInterface) {
@@ -34,9 +21,6 @@ class JobHandlerLogger implements JobHandlerLoggerInterface
         }
     }
 
-    /**
-     * @param JobInterface $job
-     */
     public function completed(JobInterface $job): void
     {
         if ($job instanceof JobStoreExecutionInterface) {
@@ -47,9 +31,6 @@ class JobHandlerLogger implements JobHandlerLoggerInterface
         }
     }
 
-    /**
-     * @param JobInterface $job
-     */
     public function failed(JobInterface $job): void
     {
         if ($job instanceof JobStoreExecutionInterface) {
@@ -60,13 +41,11 @@ class JobHandlerLogger implements JobHandlerLoggerInterface
         }
     }
 
-    /**
-     * @param JobInterface $job
-     * @param string $message
-     * @param $level
-     */
-    public function log(JobInterface $job, $message = '', $level = Logger::LEVEL_INFO): void
-    {
+    public function log(
+        JobInterface $job,
+        string $message = '',
+        $level = Logger::LEVEL_INFO
+    ): void {
         if ($job instanceof JobStoreExecutionInterface) {
             $jobExecution = $job->getJobExecution();
 

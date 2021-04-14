@@ -2,14 +2,6 @@
     "name": "jc-it/yii2-job-queue",
     "description": "Job Queue implementation.",
     "type": "library",
-    "require": {
-        "php": ">=7.1.0",
-
-        "dragonmantank/cron-expression": "^2.3",
-        "league/tactician": "^1.0.0",
-        "pda/pheanstalk": "^4.0.3",
-        "yiisoft/yii2": "~2.0.19"
-    },
     "license": "MIT",
     "authors": [
         {
@@ -23,6 +15,21 @@
             "role": "Maintainer"
         }
     ],
+    "require": {
+        "php": ">=8.0",
+
+        "dragonmantank/cron-expression": "^2.3",
+        "league/tactician": "^1.1.0",
+        "pda/pheanstalk": "^4.0.3",
+        "yiisoft/yii2": "^2.0"
+    },
+    "require-dev": {
+        "brainmaestro/composer-git-hooks": "^2.8",
+        "codeception/codeception":  "^4.1",
+        "codeception/module-yii2": "^1.1",
+        "codeception/module-asserts": "^1.3",
+        "squizlabs/php_codesniffer": "^3.5",
+    },
     "repositories": [
         {
             "type": "composer",
@@ -33,5 +40,32 @@
         "psr-4": {
             "JCIT\\jobqueue\\": ["src/"]
         }
-    }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/"
+        ],
+        "psr-4": {
+            "test\\": ["tests/"]
+        }
+    },
+    "scripts": {
+        "post-install-cmd": "cghooks add --ignore-lock",
+        "test": "codecept run --coverage",
+        "lint": "vendor/bin/phpcs",
+        "lint-fix": "vendor/bin/phpcbf"
+    },
+    "extra": {
+        "hooks": {
+            "pre-commit": [
+                "echo committing as $(git config user.name) &&",
+                "composer lint-fix  &&",
+                "composer lint &&",
+                "composer test"
+            ],
+            "commit-msg": [
+                "npx commitlint -e"
+            ]
+        }
+    },
 }

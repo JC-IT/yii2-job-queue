@@ -15,23 +15,11 @@ use yii\log\Logger;
  */
 abstract class LoggingHandler implements JobHandlerInterface
 {
-    /**
-     * @var JobHandlerLoggerInterface
-     */
-    private $jobHandlerLogger;
-
-    /**
-     * LogHandler constructor.
-     * @param JobHandlerLoggerInterface $jobHandlerLogger
-     */
-    public function __construct(JobHandlerLoggerInterface $jobHandlerLogger)
-    {
-        $this->jobHandlerLogger = $jobHandlerLogger;
+    public function __construct(
+        private JobHandlerLoggerInterface $jobHandlerLogger
+    ) {
     }
 
-    /**
-     * @param JobInterface $job
-     */
     public function handle(JobInterface $job): void
     {
         try {
@@ -45,17 +33,10 @@ abstract class LoggingHandler implements JobHandlerInterface
         }
     }
 
-    /**
-     * @param JobInterface $job
-     * @return mixed
-     */
-    protected abstract function handleInternal(JobInterface $job);
-
-    /**
-     * @return JobHandlerLoggerInterface
-     */
     protected function getJobHandlerLogger(): JobHandlerLoggerInterface
     {
         return $this->jobHandlerLogger;
     }
+
+    protected abstract function handleInternal(JobInterface $job): void;
 }
