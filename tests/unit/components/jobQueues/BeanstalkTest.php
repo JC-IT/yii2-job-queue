@@ -19,7 +19,7 @@ class BeanstalkTest extends Unit
         $connection = $this->createMock(Connection::class);
         $jobFactory = $this->createMock(JobFactory::class);
         $counter = 0;
-        $beforePut = static function(JobInterface $job) use (&$counter) {
+        $beforePut = static function (JobInterface $job) use (&$counter) {
             $counter++;
         };
 

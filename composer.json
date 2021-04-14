@@ -47,7 +47,7 @@
         }
     },
     "scripts": {
-        "post-install-cmd": "cghooks add --ignore-lock",
+        "post-install-cmd": "vendor/bin/cghooks add --ignore-lock",
         "test": "vendor/bin/codecept run --coverage",
         "lint": "vendor/bin/phpcs",
         "lint-fix": "vendor/bin/phpcbf"
@@ -59,9 +59,6 @@
                 "composer lint-fix  &&",
                 "composer lint &&",
                 "composer test"
-            ],
-            "commit-msg": [
-                "npx commitlint -e"
             ]
         }
     }

@@ -15,7 +15,7 @@ class SynchronousTest extends Unit
     {
         $commandBus = $this->createMock(CommandBus::class);
         $counter = 0;
-        $beforePut = static function(JobInterface $job) use (&$counter) {
+        $beforePut = static function (JobInterface $job) use (&$counter) {
             $counter++;
         };
 
