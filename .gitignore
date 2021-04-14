@@ -1,6 +1,5 @@
 .idea
+cghooks.lock
+composer.lock
 tests/_output
 vendor
-composer.lock
-cghooks.lock
-

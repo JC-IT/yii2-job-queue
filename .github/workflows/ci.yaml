@@ -43,6 +43,6 @@ jobs:
       - name: Run tests
         run: composer test -- --coverage-xml
       - name: Get Ocular
-        run: wget https://scrutinizer-ci.com/ocular.phar
+        run: composer global-require "scrutinizer/ocular"
       - name: Push code coverage
-        run: php ocular.phar code-coverage:upload --format=php-clover tests/_output/coverage.xml
+        run: vendor/bin/ocular code-coverage:upload --format=php-clover tests/_output/coverage.xml
