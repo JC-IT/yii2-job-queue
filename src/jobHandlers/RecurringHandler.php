@@ -51,7 +51,7 @@ class RecurringHandler implements JobHandlerInterface
         }
 
         /** @var ActiveRecordRecurringJob $recurringJob */
-        foreach($query->each() as $recurringJob) {
+        foreach ($query->each() as $recurringJob) {
             try {
                 if ($recurringJob->isDue) {
                     $this->jobQueue->putJob(

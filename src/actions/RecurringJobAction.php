@@ -30,7 +30,7 @@ class RecurringJobAction extends Action
 
     public function run(): void
     {
-        while(true) {
+        while (true) {
             try {
                 $this->commandBus->handle(new RecurringJob());
                 sleep(60);

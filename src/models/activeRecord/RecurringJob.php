@@ -45,7 +45,7 @@ class RecurringJob extends ActiveRecord
         return [
             [['name', 'cron', 'jobData'], RequiredValidator::class],
             [['description'], StringValidator::class],
-            [['cron'], function($attribute, $params, InlineValidator $validator) {
+            [['cron'], function ($attribute, $params, InlineValidator $validator) {
                 try {
                     CronExpression::factory($this->cron);
                 } catch (\InvalidArgumentException $e) {
@@ -53,7 +53,7 @@ class RecurringJob extends ActiveRecord
                 }
             }],
 
-            [['jobData'], function($attribute, $params, InlineValidator $validator){
+            [['jobData'], function ($attribute, $params, InlineValidator $validator) {
                 try {
                     \Yii::createObject(JobFactoryInterface::class)->createFromArray($this->jobData);
                 } catch (\Throwable $t) {

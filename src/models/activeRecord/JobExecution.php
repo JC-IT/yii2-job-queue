@@ -59,7 +59,7 @@ class JobExecution extends ActiveRecord
             [['status', 'jobData'], RequiredValidator::class],
             [['status'], RangeValidator::class, 'range' => array_keys($this->statusOptions())],
             [['recurringJobId'], ExistValidator::class, 'targetRelation' => 'recurringJob'],
-            [['jobData'], function($attribute, $params, InlineValidator $validator){
+            [['jobData'], function ($attribute, $params, InlineValidator $validator) {
                 try {
                     \Yii::createObject(JobFactoryInterface::class)->createFromArray($this->jobData);
                 } catch (\Throwable $t) {

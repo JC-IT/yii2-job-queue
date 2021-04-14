@@ -38,5 +38,5 @@ abstract class LoggingHandler implements JobHandlerInterface
         return $this->jobHandlerLogger;
     }
 
-    protected abstract function handleInternal(JobInterface $job): void;
+    abstract protected function handleInternal(JobInterface $job): void;
 }

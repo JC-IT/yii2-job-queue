@@ -45,7 +45,7 @@ class DaemonAction extends Action
 
         $this->controller->stdout("Waiting for jobs" . PHP_EOL, Console::FG_CYAN);
 
-        while(true) {
+        while (true) {
             $this->controller->stdout('.', Console::FG_CYAN);
             $job = $this->beanstalk->reserveWithTimeout($reserveWithTimeout);
             if (isset($job)) {
@@ -68,13 +68,12 @@ class DaemonAction extends Action
                     $this->controller->stdout(PHP_EOL . "Burying job({$job->getId()}) with message: {$t->getMessage()}" . PHP_EOL, Console::FG_YELLOW);
                     $this->beanstalk->bury($job);
                 }
-
             }
             
             $this->db->close();
 
             \Yii::getLogger()->flush();
-            foreach(\Yii::getLogger()->dispatcher->targets as $target) {
+            foreach (\Yii::getLogger()->dispatcher->targets as $target) {
                 $target->export();
             }
         }
