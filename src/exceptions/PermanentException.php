@@ -1,13 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace JCIT\jobqueue\exceptions;
 
 use RuntimeException;
 
-/**
- * Class PermanentException
- * @package JCIT\jobqueue\exceptions
- */
 class PermanentException extends RuntimeException
 {
 

@@ -1,0 +1,6 @@
+.idea
+tests/_output
+vendor
+composer.lock
+cghooks.lock
+

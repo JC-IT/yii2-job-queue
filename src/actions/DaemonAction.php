@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JCIT\jobqueue\actions;
 
@@ -13,65 +14,23 @@ use yii\console\Application;
 use yii\db\Connection;
 use yii\helpers\Console;
 
-/**
- * Class DaemonAction
- * @package JCIT\jobqueue\actions
- */
 class DaemonAction extends Action
 {
-    /**
-     * @var PheanstalkInterface
-     */
-    protected $beanstalk;
+    public int $reserveWithTimeout = 120;
 
-    /**
-     * @var CommandBus
-     */
-    protected $commandBus;
-
-    /**
-     * @var Connection
-     */
-    protected $db;
-
-    /**
-     * @var JobFactoryInterface
-     */
-    protected $jobFactory;
-
-    /**
-     * @var int
-     */
-    public $reserveWithTimeout = 120;
-
-    /**
-     * DaemonAction constructor.
-     * @param $id
-     * @param $controller
-     * @param PheanstalkInterface $beanstalk
-     * @param CommandBus $commandBus
-     * @param Connection $db
-     * @param JobFactoryInterface $jobFactory
-     * @param array $config
-     */
     public function __construct(
         $id,
         $controller,
-        PheanstalkInterface $beanstalk,
-        CommandBus $commandBus,
-        Connection $db,
-        JobFactoryInterface $jobFactory,
+        private PheanstalkInterface $beanstalk,
+        private CommandBus $commandBus,
+        private Connection $db,
+        private JobFactoryInterface $jobFactory,
         $config = []
     ) {
-        $this->beanstalk = $beanstalk;
-        $this->commandBus = $commandBus;
-        $this->db = $db;
-        $this->jobFactory = $jobFactory;
-
         parent::__construct($id, $controller, $config);
     }
 
-    public function init()
+    public function init(): void
     {
         if (!$this->controller->module instanceof Application) {
             throw new InvalidConfigException('This action can only be used in a console application.');
@@ -80,17 +39,14 @@ class DaemonAction extends Action
         parent::init();
     }
 
-    /**
-     * @param null $reserveWithTimeout
-     */
     public function run(
         $reserveWithTimeout = null
-    ) {
+    ): void {
         $reserveWithTimeout = $reserveWithTimeout ?? $this->reserveWithTimeout;
 
         $this->controller->stdout("Waiting for jobs" . PHP_EOL, Console::FG_CYAN);
 
-        while(true) {
+        while (true) {
             $this->controller->stdout('.', Console::FG_CYAN);
             $job = $this->beanstalk->reserveWithTimeout($reserveWithTimeout);
             if (isset($job)) {
@@ -113,13 +69,12 @@ class DaemonAction extends Action
                     $this->controller->stdout(PHP_EOL . "Burying job({$job->getId()}) with message: {$t->getMessage()}" . PHP_EOL, Console::FG_YELLOW);
                     $this->beanstalk->bury($job);
                 }
-
             }
             
             $this->db->close();
 
             \Yii::getLogger()->flush();
-            foreach(\Yii::getLogger()->dispatcher->targets as $target) {
+            foreach (\Yii::getLogger()->dispatcher->targets as $target) {
                 $target->export();
             }
         }
