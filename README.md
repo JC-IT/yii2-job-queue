@@ -2,6 +2,7 @@
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JC-IT/yii2-job-queue/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JC-IT/yii2-job-queue/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/JC-IT/yii2-job-queue/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/JC-IT/yii2-job-queue/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/JC-IT/yii2-job-queue/badges/build.png?b=master)](https://scrutinizer-ci.com/g/JC-IT/yii2-job-queue/build-status/master)
 
 This extension provides a package that implements a queue, workers and jobs.
 
