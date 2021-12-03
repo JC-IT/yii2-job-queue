@@ -73,10 +73,7 @@ class DaemonAction extends Action
             
             $this->db->close();
 
-            \Yii::getLogger()->flush();
-            foreach (\Yii::getLogger()->dispatcher->targets as $target) {
-                $target->export();
-            }
+            \Yii::getLogger()->flush(true);
         }
     }
 }
