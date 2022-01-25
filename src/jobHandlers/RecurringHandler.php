@@ -112,7 +112,8 @@ class RecurringHandler implements JobHandlerInterface
                     $this->jobQueue->putJob(
                         $this->createJob($recurringJob),
                         $this->priority,
-                        $this->delay
+                        $this->delay,
+                        $recurringJob->timeToRun ?? 60,
                     );
                     if ($this->queuedAtAttribute) {
                         $recurringJob->touch($this->queuedAtAttribute);

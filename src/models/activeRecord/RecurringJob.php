@@ -23,6 +23,7 @@ use yii\validators\StringValidator;
  * @property int|null $queuedAt [timestamp]
  * @property int|null $createdAt [timestamp]
  * @property int|null $updatedAt [timestamp]
+ * @property int|null $timeToRun [int]
  *
  * @property-read bool $isDue
  */
