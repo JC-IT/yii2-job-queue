@@ -30,12 +30,7 @@
         "scrutinizer/ocular": "^1.8",
         "squizlabs/php_codesniffer": "^3.5"
     },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        }
-    ],
+    "repositories": [],
     "autoload": {
         "psr-4": {
             "JCIT\\jobqueue\\": ["src/"]
