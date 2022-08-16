@@ -18,7 +18,6 @@
     "require": {
         "php": ">=8.0",
 
-        "dragonmantank/cron-expression": "^2.3",
         "league/tactician": "^1.1.0",
         "pda/pheanstalk": "^4.0.3",
         "yiisoft/yii2": "^2.0"
