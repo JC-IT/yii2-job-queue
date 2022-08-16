@@ -61,5 +61,10 @@
                 "composer test"
             ]
         }
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
     }
 }
