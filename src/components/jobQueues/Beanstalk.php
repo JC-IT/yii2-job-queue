@@ -7,31 +7,29 @@ use Closure;
 use JCIT\jobqueue\interfaces\JobFactoryInterface;
 use JCIT\jobqueue\interfaces\JobInterface;
 use JCIT\jobqueue\interfaces\JobQueueInterface;
-use Pheanstalk\Connection;
-use Pheanstalk\Contract\PheanstalkInterface;
+use Pheanstalk\Contract\PheanstalkPublisherInterface;
 use Pheanstalk\Pheanstalk;
 
-class Beanstalk extends Pheanstalk implements JobQueueInterface
+class Beanstalk implements JobQueueInterface
 {
     public function __construct(
-        Connection $connection,
-        private JobFactoryInterface $jobFactory,
-        private ?Closure $beforePut = null
+        private readonly Pheanstalk $pheanstalk,
+        private readonly JobFactoryInterface $jobFactory,
+        private readonly ?Closure $beforePut = null
     ) {
-        parent::__construct($connection);
     }
 
     public function putJob(
         JobInterface $job,
-        int $priority = PheanstalkInterface::DEFAULT_PRIORITY,
-        int $delay = PheanstalkInterface::DEFAULT_DELAY,
-        int $ttr = PheanstalkInterface::DEFAULT_TTR
+        int $priority = PheanstalkPublisherInterface::DEFAULT_PRIORITY,
+        int $delay = PheanstalkPublisherInterface::DEFAULT_DELAY,
+        int $ttr = PheanstalkPublisherInterface::DEFAULT_TTR
     ): void {
         if (isset($this->beforePut)) {
             ($this->beforePut)($job);
         }
 
-        $this->put(
+        $this->pheanstalk->put(
             $this->jobFactory->saveToJson($job),
             $priority,
             $delay,

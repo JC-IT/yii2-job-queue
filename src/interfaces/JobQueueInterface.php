@@ -5,8 +5,8 @@ namespace JCIT\jobqueue\interfaces;
 
 interface JobQueueInterface
 {
-    public const PRIORITY_NORMAL = 1024;
-    public const PRIORITY_LOW = 4096;
+    public const int PRIORITY_NORMAL = 1024;
+    public const int PRIORITY_LOW = 4096;
 
     public function putJob(
         JobInterface $job,

@@ -7,21 +7,21 @@ use Closure;
 use JCIT\jobqueue\interfaces\JobInterface;
 use JCIT\jobqueue\interfaces\JobQueueInterface;
 use League\Tactician\CommandBus;
-use Pheanstalk\Contract\PheanstalkInterface;
+use Pheanstalk\Contract\PheanstalkPublisherInterface;
 
 class Synchronous implements JobQueueInterface
 {
     public function __construct(
-        private CommandBus $commandBus,
-        private ?Closure $beforePut = null
+        private readonly CommandBus $commandBus,
+        private readonly ?Closure $beforePut = null
     ) {
     }
 
     public function putJob(
         JobInterface $job,
-        int $priority = PheanstalkInterface::DEFAULT_PRIORITY,
-        int $delay = PheanstalkInterface::DEFAULT_DELAY,
-        int $ttr = PheanstalkInterface::DEFAULT_TTR
+        int $priority = PheanstalkPublisherInterface::DEFAULT_PRIORITY,
+        int $delay = PheanstalkPublisherInterface::DEFAULT_DELAY,
+        int $ttr = PheanstalkPublisherInterface::DEFAULT_TTR
     ): void {
         if (isset($this->beforePut)) {
             ($this->beforePut)($job);

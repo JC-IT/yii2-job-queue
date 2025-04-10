@@ -8,15 +8,11 @@ use yii\base\Event;
 
 class JobQueueEvent extends Event
 {
-    public const EVENT_JOB_QUEUE_PUT = 'put';
-    public const EVENT_JOB_QUEUE_HANDLE = 'handle';
+    public const string EVENT_JOB_QUEUE_PUT = 'put';
+    public const string EVENT_JOB_QUEUE_HANDLE = 'handle';
 
-    /**
-     * JobQueueEvent constructor.
-     * @param JobInterface $job
-     */
     public function __construct(
-        private JobInterface $job
+        private readonly JobInterface $job
     ) {
         parent::__construct();
     }

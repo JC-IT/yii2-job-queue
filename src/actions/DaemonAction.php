@@ -7,7 +7,7 @@ use JCIT\jobqueue\events\JobQueueEvent;
 use JCIT\jobqueue\exceptions\PermanentException;
 use JCIT\jobqueue\interfaces\JobFactoryInterface;
 use League\Tactician\CommandBus;
-use Pheanstalk\Contract\PheanstalkInterface;
+use Pheanstalk\Contract\PheanstalkSubscriberInterface;
 use yii\base\Action;
 use yii\base\InvalidConfigException;
 use yii\console\Application;
@@ -21,10 +21,10 @@ class DaemonAction extends Action
     public function __construct(
         $id,
         $controller,
-        private PheanstalkInterface $beanstalk,
-        private CommandBus $commandBus,
-        private Connection $db,
-        private JobFactoryInterface $jobFactory,
+        private readonly PheanstalkSubscriberInterface $beanstalk,
+        private readonly CommandBus $commandBus,
+        private readonly Connection $db,
+        private readonly JobFactoryInterface $jobFactory,
         $config = []
     ) {
         parent::__construct($id, $controller, $config);
